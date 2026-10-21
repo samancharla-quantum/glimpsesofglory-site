@@ -10,53 +10,233 @@
 <style>
   :root { --cream:#fbf7f0; --gold:#b8893b; --deep:#3d2c4e; --text:#4a4458; }
   * { box-sizing:border-box; margin:0; padding:0; }
+  html { scroll-behavior:smooth; }
   body { font-family:'Lato',sans-serif; color:var(--text); text-align:center;
          background: radial-gradient(circle at 50% 0%, #fff 0%, var(--cream) 55%, #f1e7d6 100%); min-height:100vh; }
   header { padding:40px 20px 10px; }
   header img { width:220px; max-width:70%; height:auto; }
   .tag { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.3rem; color:var(--gold); margin-top:6px; }
-  .notice { display:inline-block; margin:22px auto 0; padding:8px 18px; border:1px solid #eadfcb; border-radius:999px;
-            background:#fff; font-size:.8rem; letter-spacing:3px; text-transform:uppercase; color:var(--deep); }
   h2.section { font-family:'Cormorant Garamond',serif; font-weight:600; font-size:2rem; color:var(--deep); margin:44px 0 6px; }
   .divider { width:70px; height:2px; background:var(--gold); opacity:.6; margin:0 auto 30px; }
   .grid { display:flex; flex-wrap:wrap; justify-content:center; gap:26px; max-width:1100px; margin:0 auto; padding:0 24px; }
-  .cat { flex:0 1 240px; background:#fff; border:1px solid #eadfcb; border-radius:16px; overflow:hidden; text-decoration:none; color:inherit;
+  .cat, .prod { flex:0 1 240px; background:#fff; border:1px solid #eadfcb; border-radius:16px; overflow:hidden; text-decoration:none; color:inherit;
          box-shadow:0 8px 30px rgba(61,44,78,.07); transition:transform .2s, box-shadow .2s; }
-  .cat:hover { transform:translateY(-4px); box-shadow:0 14px 36px rgba(61,44,78,.13); }
+  .cat:hover, .prod:hover { transform:translateY(-4px); box-shadow:0 14px 36px rgba(61,44,78,.13); }
   .cat .img { aspect-ratio:1/1; background:url('placeholder.jpg') center/cover; position:relative; }
   .cat .img span { position:absolute; bottom:12px; left:50%; transform:translateX(-50%); background:rgba(255,255,255,.85);
                    padding:4px 12px; border-radius:999px; font-size:.7rem; letter-spacing:2px; text-transform:uppercase; color:var(--deep); white-space:nowrap; }
-  .cat h3 { font-family:'Cormorant Garamond',serif; font-weight:600; font-size:1.5rem; color:var(--deep); margin:16px 12px 4px; }
+  .cat h3, .prod h3 { font-family:'Cormorant Garamond',serif; font-weight:600; font-size:1.5rem; color:var(--deep); margin:16px 12px 4px; }
   .cat p { font-size:.9rem; line-height:1.5; margin:0 18px 20px; }
+  .catsec { scroll-margin-top:16px; }
+  .catsec .intro { max-width:620px; margin:-18px auto 26px; padding:0 24px; font-size:.95rem; line-height:1.6; }
+  .prod { flex:0 1 260px; display:flex; flex-direction:column; text-align:center; }
+  .prod .photo { aspect-ratio:1/1; width:100%; object-fit:cover; display:block; background:#f4ede1; }
+  .prod .desc { font-size:.9rem; line-height:1.5; margin:4px 18px 12px; white-space:pre-line; }
+  .prod .meta { margin:0 18px 6px; }
+  .prod .price { font-family:'Cormorant Garamond',serif; font-weight:600; font-size:1.35rem; color:var(--gold); }
+  .prod .lead { font-size:.78rem; letter-spacing:1px; text-transform:uppercase; color:#8a8197; margin-top:2px; }
+  .prod .spacer { flex:1; }
+  .btn { display:inline-block; margin:12px auto 20px; padding:10px 28px; border-radius:999px; background:var(--deep); color:#fff;
+         text-decoration:none; font-size:.8rem; letter-spacing:2px; text-transform:uppercase; font-weight:700; transition:background .2s; }
+  .btn:hover { background:var(--gold); }
+  .soon { display:inline-block; padding:14px 26px; border:1px dashed #d9c7a6; border-radius:14px; background:rgba(255,255,255,.7);
+          font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.2rem; color:var(--deep); }
+  .totop { display:block; margin:18px auto 0; font-size:.75rem; letter-spacing:2px; text-transform:uppercase; color:#9a93a6; text-decoration:none; }
   .contact { margin:50px 0 0; font-size:.95rem; }
   .contact a { color:var(--deep); font-weight:700; text-decoration:none; border-bottom:1px solid var(--gold); }
   footer { margin:30px 0 40px; font-size:.75rem; color:#9a93a6; }
+  @media (max-width:560px) {
+    .grid { gap:16px; padding:0 14px; }
+    .cat { flex:0 1 calc(50% - 8px); }
+    .cat h3 { font-size:1.2rem; margin:10px 8px 2px; }
+    .cat p { display:none; }
+    .cat .img span { font-size:.6rem; letter-spacing:1px; padding:3px 8px; }
+    .prod { flex:1 1 100%; max-width:360px; }
+    h2.section { font-size:1.7rem; margin-top:36px; }
+  }
 </style>
 </head>
 <body>
-  <header>
+  <header id="top">
     <h1><img src="logo.png" alt="Glimpses of Glory" width="610" height="565"></h1>
     <div class="tag">Handcrafted cards &amp; gifts inspired by faith</div>
-    <div class="notice">Online shop coming soon</div>
   </header>
 
   <h2 class="section">Shop by Category</h2>
   <div class="divider"></div>
+  <nav class="grid" id="cats"></nav>
 
-  <main class="grid">
-    <a class="cat" id="greeting-cards"><div class="img"><span>Coming soon</span></div>
-      <h3>Greeting Cards</h3><p>Scripture-inspired Christmas and everyday cards, singles, 5-packs, and boxed sets.</p></a>
-    <a class="cat" id="tumblers"><div class="img"><span>Coming soon</span></div>
-      <h3>Tumblers</h3><p>Sublimated tumblers with designs to carry a word of hope through the day.</p></a>
-    <a class="cat" id="coasters"><div class="img"><span>Coming soon</span></div>
-      <h3>Coasters</h3><p>Ceramic coasters with cork backing, sold individually or in sets.</p></a>
-    <a class="cat" id="cutting-boards"><div class="img"><span>Coming soon</span></div>
-      <h3>Glass Cutting Boards</h3><p>Tempered glass cutting boards that double as beautiful kitchen keepsakes.</p></a>
-    <a class="cat" id="misc"><div class="img"><span>Coming soon</span></div>
-      <h3>Gifts &amp; More</h3><p>Seasonal pieces, custom orders, and other handcrafted treasures.</p></a>
-  </main>
+  <main id="sections"></main>
 
-  <div class="contact">Questions or custom orders? <a href="mailto:samancharla@gmail.com">Email us</a></div>
+  <div class="contact">Questions or custom orders? <a href="mailto:samancharla+gog@gmail.com">Email us</a></div>
   <footer>&copy; 2026 Glimpses of Glory &middot; A branch of Armchair Technologies LLC</footer>
+
+<script>
+(function () {
+  // ---- Settings -------------------------------------------------------
+  var SHEET_ID = '1pcVfe6pvB_jF8MCk5sKVdR3AQpWwAfS9g8yBf9-8ZXQ';
+  var CSV_URL = window.GOG_CSV_URL ||
+    'https://docs.google.com/spreadsheets/d/' + SHEET_ID + '/gviz/tq?tqx=out:csv&headers=1&sheet=Products';
+  var ORDER_EMAIL = 'samancharla+gog@gmail.com';
+  var PLACEHOLDER = 'placeholder.jpg';
+  var CATEGORIES = [
+    { key:'greeting cards', id:'greeting-cards', name:'Greeting Cards',
+      blurb:'Scripture-inspired Christmas and everyday cards, singles, 5-packs, and boxed sets.' },
+    { key:'tumblers', id:'tumblers', name:'Tumblers',
+      blurb:'Sublimated tumblers with designs to carry a word of hope through the day.' },
+    { key:'coasters', id:'coasters', name:'Coasters',
+      blurb:'Ceramic coasters with cork backing, sold individually or in sets.' },
+    { key:'glass cutting boards', id:'cutting-boards', name:'Glass Cutting Boards',
+      blurb:'Tempered glass cutting boards that double as beautiful kitchen keepsakes.' },
+    { key:'gifts & more', id:'misc', name:'Gifts & More',
+      blurb:'Seasonal pieces, custom orders, and other handcrafted treasures.' }
+  ];
+
+  // ---- Helpers --------------------------------------------------------
+  function el(tag, cls, text) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text != null) e.textContent = text;
+    return e;
+  }
+
+  // RFC 4180 CSV parser: quoted fields, "" escapes, commas and newlines inside quotes.
+  function parseCSV(text) {
+    var rows = [], row = [], field = '', i = 0, q = false, c;
+    text = String(text).replace(/^\uFEFF/, '');
+    while (i < text.length) {
+      c = text[i];
+      if (q) {
+        if (c === '"') {
+          if (text[i + 1] === '"') { field += '"'; i += 2; continue; }
+          q = false; i++; continue;
+        }
+        field += c; i++; continue;
+      }
+      if (c === '"') { q = true; i++; continue; }
+      if (c === ',') { row.push(field); field = ''; i++; continue; }
+      if (c === '\r') { i++; continue; }
+      if (c === '\n') { row.push(field); rows.push(row); row = []; field = ''; i++; continue; }
+      field += c; i++;
+    }
+    if (field !== '' || row.length) { row.push(field); rows.push(row); }
+    return rows.filter(function (r) { return r.some(function (v) { return v.trim() !== ''; }); });
+  }
+
+  function norm(s) { return String(s || '').trim().toLowerCase().replace(/\s+/g, ' ').replace(/\band\b/g, '&'); }
+
+  function toObjects(rows) {
+    if (!rows.length) return [];
+    var head = rows[0].map(function (h) { return norm(h); });
+    function idx(names) { for (var k = 0; k < names.length; k++) { var j = head.indexOf(names[k]); if (j > -1) return j; } return -1; }
+    var col = {
+      show: idx(['show']), category: idx(['category']), name: idx(['name']), description: idx(['description']),
+      price: idx(['price']), lead: idx(['lead time', 'leadtime']), photo: idx(['photo link', 'photo']),
+      link: idx(['square link', 'order link', 'link']), sort: idx(['sort'])
+    };
+    if (col.name < 0 || col.category < 0) throw new Error('Sheet headers not recognized');
+    return rows.slice(1).map(function (r) {
+      function g(k) { return col[k] > -1 && r[col[k]] != null ? String(r[col[k]]).trim() : ''; }
+      return { show:g('show'), category:g('category'), name:g('name'), description:g('description'),
+               price:g('price'), lead:g('lead'), photo:g('photo'), link:g('link'), sort:g('sort') };
+    });
+  }
+
+  function isYes(v) { return /^(yes|y|true|x|1)$/i.test(String(v).trim()); }
+
+  function photoUrl(link) {
+    link = String(link || '').trim();
+    if (!link) return PLACEHOLDER;
+    if (/(drive|docs)\.google\.com|googleusercontent\.com/i.test(link)) {
+      var m = link.match(/\/file\/d\/([A-Za-z0-9_-]{10,})/) || link.match(/[?&]id=([A-Za-z0-9_-]{10,})/) ||
+              link.match(/googleusercontent\.com\/d\/([A-Za-z0-9_-]{10,})/);
+      if (m) return 'https://lh3.googleusercontent.com/d/' + m[1] + '=w800';
+    }
+    if (/^https?:\/\//i.test(link)) return link;
+    return PLACEHOLDER;
+  }
+
+  function safeLink(link) { link = String(link || '').trim(); return /^https?:\/\//i.test(link) ? link : ''; }
+
+  function orderHref(p) {
+    var l = safeLink(p.link);
+    if (l) return l;
+    var body = 'Hello Glimpses of Glory,\n\nI would like to order: ' + p.name +
+      (p.price ? ' (' + p.price + ')' : '') + '\nQuantity: \nNeeded by (date): \nPersonalization / notes: \n\nMy name and phone: \n\nThank you!';
+    return 'mailto:' + ORDER_EMAIL + '?subject=' + encodeURIComponent('Order request: ' + p.name) +
+           '&body=' + encodeURIComponent(body);
+  }
+
+  function sortNum(v) { var n = parseFloat(String(v).replace(/[^0-9.\-]/g, '')); return isNaN(n) ? 1e9 : n; }
+
+  // ---- Rendering ------------------------------------------------------
+  function render(groups) {
+    var nav = document.getElementById('cats'), main = document.getElementById('sections');
+    nav.innerHTML = ''; main.innerHTML = '';
+    CATEGORIES.forEach(function (c) {
+      var items = groups ? (groups[c.key] || []) : [];
+      var a = el('a', 'cat'); a.href = '#' + c.id;
+      var img = el('div', 'img'); img.appendChild(el('span', null, items.length ? (items.length + (items.length === 1 ? ' item' : ' items')) : 'Coming soon'));
+      a.appendChild(img); a.appendChild(el('h3', null, c.name)); a.appendChild(el('p', null, c.blurb));
+      nav.appendChild(a);
+
+      var sec = el('section', 'catsec'); sec.id = c.id;
+      sec.appendChild(el('h2', 'section', c.name)); sec.appendChild(el('div', 'divider'));
+      sec.appendChild(el('p', 'intro', c.blurb));
+      var grid = el('div', 'grid');
+      if (!items.length) {
+        grid.appendChild(el('div', 'soon', 'Coming soon \u2014 new pieces are being lovingly made.'));
+      } else {
+        items.forEach(function (p) {
+          var card = el('article', 'prod');
+          var im = el('img', 'photo'); im.loading = 'lazy'; im.alt = p.name; im.src = photoUrl(p.photo);
+          im.onerror = function () { if (this.src.indexOf(PLACEHOLDER) === -1) this.src = PLACEHOLDER; };
+          card.appendChild(im);
+          card.appendChild(el('h3', null, p.name));
+          if (p.description) card.appendChild(el('p', 'desc', p.description));
+          card.appendChild(el('div', 'spacer'));
+          var meta = el('div', 'meta');
+          if (p.price) meta.appendChild(el('div', 'price', p.price));
+          if (p.lead) meta.appendChild(el('div', 'lead', p.lead));
+          card.appendChild(meta);
+          var b = el('a', 'btn', 'Order'); b.href = orderHref(p);
+          if (safeLink(p.link)) { b.target = '_blank'; b.rel = 'noopener'; }
+          card.appendChild(b);
+          grid.appendChild(card);
+        });
+      }
+      sec.appendChild(grid);
+      var top = el('a', 'totop', '\u2191 Back to categories'); top.href = '#top'; sec.appendChild(top);
+      main.appendChild(sec);
+    });
+  }
+
+  function group(products) {
+    var groups = {}, fallback = 'gifts & more', keys = CATEGORIES.map(function (c) { return c.key; });
+    products.forEach(function (p) {
+      if (!isYes(p.show) || !p.name) return;
+      var k = norm(p.category); if (keys.indexOf(k) === -1) k = fallback;
+      (groups[k] = groups[k] || []).push(p);
+    });
+    Object.keys(groups).forEach(function (k) {
+      groups[k].sort(function (a, b) { return (sortNum(a.sort) - sortNum(b.sort)) || a.name.localeCompare(b.name); });
+    });
+    return groups;
+  }
+
+  render(null); // show categories immediately (and as the fallback)
+  var ctl = window.AbortController ? new AbortController() : null;
+  var timer = setTimeout(function () { if (ctl) ctl.abort(); }, 12000);
+  fetch(CSV_URL, { cache:'no-store', signal: ctl ? ctl.signal : undefined })
+    .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
+    .then(function (t) {
+      clearTimeout(timer);
+      if (/^\s*</.test(t)) throw new Error('Not CSV (sheet may not be shared publicly)');
+      render(group(toObjects(parseCSV(t))));
+      if (location.hash) { var t2 = document.getElementById(location.hash.slice(1)); if (t2) t2.scrollIntoView(); }
+    })
+    .catch(function (e) { clearTimeout(timer); if (window.console) console.warn('Catalog not loaded:', e); });
+})();
+</script>
 </body>
 </html>
