@@ -3,38 +3,60 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Glimpses of Glory | Coming Soon</title>
-<meta name="description" content="Glimpses of Glory: handcrafted faith-inspired greeting cards and gifts. Our shop is coming soon.">
+<title>Glimpses of Glory | Handcrafted Cards &amp; Gifts</title>
+<meta name="description" content="Glimpses of Glory: handcrafted faith-inspired greeting cards, tumblers, coasters, glass cutting boards, and more.">
 <link rel="icon" href="logo.png">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Lato:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root { --cream:#fbf7f0; --gold:#b8893b; --deep:#3d2c4e; --text:#4a4458; }
   * { box-sizing:border-box; margin:0; padding:0; }
-  body { min-height:100vh; display:flex; align-items:center; justify-content:center;
-         background: radial-gradient(circle at 50% 30%, #fff 0%, var(--cream) 60%, #f1e7d6 100%);
-         font-family:'Lato',sans-serif; color:var(--text); padding:24px; text-align:center; }
-  .card { max-width:560px; width:100%; background:#fff; border:1px solid #eadfcb; border-radius:18px;
-          padding:48px 36px; box-shadow:0 10px 40px rgba(61,44,78,.08); }
-  .logo img { width:260px; max-width:80%; height:auto; display:block; margin:0 auto 4px; }
-  h1 { font-family:'Cormorant Garamond',serif; font-weight:600; font-size:2.6rem; color:var(--deep); letter-spacing:.5px; }
-  .tag { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.25rem; color:var(--gold); margin:6px 0 26px; }
-  .divider { width:80px; height:2px; background:var(--gold); margin:0 auto 26px; opacity:.6; }
-  h2 { font-size:.85rem; letter-spacing:4px; text-transform:uppercase; color:var(--deep); margin-bottom:14px; }
-  p { line-height:1.7; font-size:1rem; }
-  .contact { margin-top:28px; font-size:.95rem; }
+  body { font-family:'Lato',sans-serif; color:var(--text); text-align:center;
+         background: radial-gradient(circle at 50% 0%, #fff 0%, var(--cream) 55%, #f1e7d6 100%); min-height:100vh; }
+  header { padding:40px 20px 10px; }
+  header img { width:220px; max-width:70%; height:auto; }
+  .tag { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.3rem; color:var(--gold); margin-top:6px; }
+  .notice { display:inline-block; margin:22px auto 0; padding:8px 18px; border:1px solid #eadfcb; border-radius:999px;
+            background:#fff; font-size:.8rem; letter-spacing:3px; text-transform:uppercase; color:var(--deep); }
+  h2.section { font-family:'Cormorant Garamond',serif; font-weight:600; font-size:2rem; color:var(--deep); margin:44px 0 6px; }
+  .divider { width:70px; height:2px; background:var(--gold); opacity:.6; margin:0 auto 30px; }
+  .grid { display:flex; flex-wrap:wrap; justify-content:center; gap:26px; max-width:1100px; margin:0 auto; padding:0 24px; }
+  .cat { flex:0 1 240px; background:#fff; border:1px solid #eadfcb; border-radius:16px; overflow:hidden; text-decoration:none; color:inherit;
+         box-shadow:0 8px 30px rgba(61,44,78,.07); transition:transform .2s, box-shadow .2s; }
+  .cat:hover { transform:translateY(-4px); box-shadow:0 14px 36px rgba(61,44,78,.13); }
+  .cat .img { aspect-ratio:1/1; background:url('placeholder.jpg') center/cover; position:relative; }
+  .cat .img span { position:absolute; bottom:12px; left:50%; transform:translateX(-50%); background:rgba(255,255,255,.85);
+                   padding:4px 12px; border-radius:999px; font-size:.7rem; letter-spacing:2px; text-transform:uppercase; color:var(--deep); white-space:nowrap; }
+  .cat h3 { font-family:'Cormorant Garamond',serif; font-weight:600; font-size:1.5rem; color:var(--deep); margin:16px 12px 4px; }
+  .cat p { font-size:.9rem; line-height:1.5; margin:0 18px 20px; }
+  .contact { margin:50px 0 0; font-size:.95rem; }
   .contact a { color:var(--deep); font-weight:700; text-decoration:none; border-bottom:1px solid var(--gold); }
-  footer { margin-top:34px; font-size:.75rem; color:#9a93a6; }
+  footer { margin:30px 0 40px; font-size:.75rem; color:#9a93a6; }
 </style>
 </head>
 <body>
-  <main class="card">
-    <h1 class="logo"><img src="logo.png" alt="Glimpses of Glory" width="610" height="565"></h1>
+  <header>
+    <h1><img src="logo.png" alt="Glimpses of Glory" width="610" height="565"></h1>
     <div class="tag">Handcrafted cards &amp; gifts inspired by faith</div>
-    <div class="divider"></div>
-    <h2>Our shop is coming soon</h2>
-    <p>We're putting the finishing touches on our online shop of Christmas cards, boxed sets, and sublimated keepsakes. Check back soon!</p>
-    <div class="contact">Questions or custom orders? <a href="mailto:samancharla@gmail.com">Email us</a></div>
-    <footer>&copy; 2026 Glimpses of Glory &middot; A branch of Armchair Technologies LLC</footer>
+    <div class="notice">Online shop coming soon</div>
+  </header>
+
+  <h2 class="section">Shop by Category</h2>
+  <div class="divider"></div>
+
+  <main class="grid">
+    <a class="cat" id="greeting-cards"><div class="img"><span>Coming soon</span></div>
+      <h3>Greeting Cards</h3><p>Scripture-inspired Christmas and everyday cards, singles, 5-packs, and boxed sets.</p></a>
+    <a class="cat" id="tumblers"><div class="img"><span>Coming soon</span></div>
+      <h3>Tumblers</h3><p>Sublimated tumblers with designs to carry a word of hope through the day.</p></a>
+    <a class="cat" id="coasters"><div class="img"><span>Coming soon</span></div>
+      <h3>Coasters</h3><p>Ceramic coasters with cork backing, sold individually or in sets.</p></a>
+    <a class="cat" id="cutting-boards"><div class="img"><span>Coming soon</span></div>
+      <h3>Glass Cutting Boards</h3><p>Tempered glass cutting boards that double as beautiful kitchen keepsakes.</p></a>
+    <a class="cat" id="misc"><div class="img"><span>Coming soon</span></div>
+      <h3>Gifts &amp; More</h3><p>Seasonal pieces, custom orders, and other handcrafted treasures.</p></a>
   </main>
+
+  <div class="contact">Questions or custom orders? <a href="mailto:samancharla@gmail.com">Email us</a></div>
+  <footer>&copy; 2026 Glimpses of Glory &middot; A branch of Armchair Technologies LLC</footer>
 </body>
 </html>
