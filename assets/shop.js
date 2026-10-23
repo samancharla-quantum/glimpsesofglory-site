@@ -101,6 +101,10 @@
 
   function isYes(v) { return /^(yes|y|true|x|1)$/i.test(String(v).trim()); }
 
+  // Sample listings (Name starts with "SAMPLE", or Price says "(sample)") demonstrate the gallery.
+  // They are hidden on the home page but still shown (and deep-linkable) on the category pages.
+  function isSample(p) { return /^\s*sample\b/i.test(p.name || '') || /\(\s*sample\s*\)/i.test(p.price || ''); }
+
   // Google Drive share link -> file id (file/d/ID/view, open?id=ID, uc?id=ID, thumbnail?id=ID, lh3 .../d/ID).
   function driveId(link) {
     if (!/(drive|docs)\.google\.com|googleusercontent\.com/i.test(link)) return '';
@@ -195,15 +199,25 @@
     return soon;
   }
 
+  // Neutral stand-in for a real product that has no usable photo yet (no category art, so it can't read as a sample).
+  function noPhoto() { var d = el('div', 'nophoto'); d.appendChild(el('span', null, 'Photo coming soon')); return d; }
+
   function productCard(p, c) {
     var card = el('article', 'prod');
     var href = '#p/' + p.slug;
     var ph = el('a', 'ph'); ph.href = href; ph.setAttribute('aria-label', 'View photos: ' + p.name);
     var first = p.views.filter(function (v) { return v.type === 'img'; })[0];
-    var im = el('img', 'photo'); im.loading = 'lazy'; im.alt = p.name;
-    setSrc(im, first ? imgSrc(first.link, 800) : photoUrl(p.photo, c.thumb));
-    im.onerror = function () { if (this.src.indexOf(PLACEHOLDER) === -1) this.src = PLACEHOLDER; };
-    ph.appendChild(im);
+    if (!first && !isSample(p)) {
+      ph.appendChild(noPhoto());
+    } else {
+      var im = el('img', 'photo'); im.loading = 'lazy'; im.alt = p.name;
+      setSrc(im, first ? imgSrc(first.link, 800) : photoUrl(p.photo, c.thumb));
+      im.onerror = function () {
+        if (!isSample(p)) { this.replaceWith(noPhoto()); return; } // real product: neutral placeholder
+        if (this.src.indexOf(PLACEHOLDER) === -1) this.src = PLACEHOLDER;
+      };
+      ph.appendChild(im);
+    }
     var nImg = p.views.filter(function (v) { return v.type === 'img'; }).length, hasVid = p.views.length > nImg;
     if (p.views.length > 1) ph.appendChild(el('span', 'views', nImg + (nImg === 1 ? ' photo' : ' photos') + (hasVid ? ' + video' : '')));
     card.appendChild(ph);
@@ -223,26 +237,27 @@
 
   function mailLink(text) { var a = el('a', null, text); a.href = 'mailto:' + ORDER_EMAIL; return a; }
 
-  // Home page: category tiles, then up to HOME_LIMIT products per category and a "See all" link.
+  // Home page: category tiles, then a section (up to HOME_LIMIT products + a link to the category page)
+  // only for categories that have real products. Samples are skipped here; they stay on the category pages.
   function renderHome(groups) {
     var nav = document.getElementById('cats'), main = document.getElementById('sections');
     nav.innerHTML = ''; main.innerHTML = '';
     CATEGORIES.forEach(function (c) {
-      var items = groups ? (groups[c.key] || []) : [];
+      var items = (groups ? (groups[c.key] || []) : []).filter(function (p) { return !isSample(p); });
       nav.appendChild(catTile(c, items));
+      if (!items.length) return; // no real products yet: the tile above says "Coming soon"; no section on the home page
 
       var sec = el('section', 'catsec'); sec.id = c.id; // old #tumblers-style links keep working
       var h2 = el('h2', 'section'), hl = el('a', null, c.name); hl.href = c.url;
       h2.appendChild(hl); sec.appendChild(h2); sec.appendChild(el('div', 'divider'));
       sec.appendChild(el('p', 'intro', c.blurb));
       var grid = el('div', 'grid');
-      if (!items.length) grid.appendChild(comingSoon(c));
-      else items.slice(0, HOME_LIMIT).forEach(function (p) { grid.appendChild(productCard(p, c)); });
+      items.slice(0, HOME_LIMIT).forEach(function (p) { grid.appendChild(productCard(p, c)); });
       sec.appendChild(grid);
-      if (items.length > HOME_LIMIT) {
-        var w = el('div', 'seeall-wrap'), sa = el('a', 'seeall', 'See all ' + c.name + ' (' + items.length + ') \u2192');
-        sa.href = c.url; w.appendChild(sa); sec.appendChild(w);
-      }
+      // always point to the category page, even when the section is short
+      var w = el('div', 'seeall-wrap'), sa = el('a', 'seeall',
+        items.length > HOME_LIMIT ? 'See all ' + c.name + ' (' + items.length + ') \u2192' : 'Visit the ' + c.name + ' page \u2192');
+      sa.href = c.url; w.appendChild(sa); sec.appendChild(w);
       var top = el('a', 'totop', '\u2191 Back to categories'); top.href = '#top'; sec.appendChild(top);
       main.appendChild(sec);
     });
@@ -337,6 +352,7 @@
 
   function viewsOf(p) {
     if (p.views.length) return p.views;
+    if (!isSample(p)) return [{ type:'none', caption:'' }]; // real product, no photo yet: neutral placeholder
     return [{ type:'img', link:p.cat.thumb, caption:'' }]; // no photos yet: same single image the card shows
   }
 
@@ -345,9 +361,11 @@
     if (!vs.length) return;
     idx = (i + vs.length) % vs.length;
     var v = vs[idx];
-    [].slice.call(stage.querySelectorAll('img,video,iframe')).forEach(function (n) { n.remove(); });
+    [].slice.call(stage.querySelectorAll('img,video,iframe,.nophoto')).forEach(function (n) { n.remove(); });
     var node;
-    if (v.type === 'img') {
+    if (v.type === 'none') {
+      node = noPhoto();
+    } else if (v.type === 'img') {
       node = el('img'); node.alt = cur.name + (v.caption ? ' \u2014 ' + v.caption : ''); node.decoding = 'async';
       setSrc(node, imgSrc(v.link, 1600));
       node.onerror = function () { dropView(v); };
@@ -394,6 +412,7 @@
     var vs = viewsOf(cur);
     thumbs.hidden = vs.length < 2;
     vs.forEach(function (v, j) {
+      if (v.type === 'none') return; // "Photo coming soon" placeholder: nothing to thumbnail
       var b = el('button', 'thumb' + (v.type === 'img' ? '' : ' vid')); b.type = 'button';
       b.setAttribute('aria-label', 'View ' + (j + 1) + (v.caption ? ': ' + v.caption : '') + (v.type === 'img' ? '' : ' (video)'));
       if (v.type === 'img') {
@@ -443,7 +462,7 @@
   function hideGal() {
     if (!isOpen) return;
     isOpen = false;
-    [].slice.call(stage.querySelectorAll('img,video,iframe')).forEach(function (n) { n.remove(); }); // stops video
+    [].slice.call(stage.querySelectorAll('img,video,iframe,.nophoto')).forEach(function (n) { n.remove(); }); // stops video
     thumbs.innerHTML = '';
     gal.classList.remove('open'); gal.hidden = true; document.documentElement.classList.remove('gal-lock'); setInert(false);
     var back = lastFocus && document.contains(lastFocus) ? lastFocus : document.querySelector('a.ph[href="#p/' + (cur && cur.slug) + '"]');
