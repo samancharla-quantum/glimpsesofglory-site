@@ -1,6 +1,8 @@
 /* Glimpses of Glory shop: loads the Products sheet and renders the home page or one category page.
    Shared by /index.html and every /<category>/index.html. Settings live here only. */
 (function () {
+  // Plain content pages (e.g. /how-its-made/, <body data-page="static">) only need the mobile menu.
+  if (document.body.getAttribute('data-page') === 'static') { initMenu(); return; }
   // ---- Settings -------------------------------------------------------
   var SHEET_ID = '1pcVfe6pvB_jF8MCk5sKVdR3AQpWwAfS9g8yBf9-8ZXQ';
   var CSV_URL = window.GOG_CSV_URL ||
@@ -13,18 +15,19 @@
   var ROOT = '/';
   try { ROOT = new URL('..', SCRIPT.src).pathname; } catch (e) {}
   var PLACEHOLDER = ROOT + 'placeholder.jpg';
-  // key = Sheet "Category" value (lower case), id = home-page anchor (#tumblers), page = folder of the category page.
+  // key = Sheet "Category" value (lower case), id = home-page anchor (#tumblers), page = folder of the category page,
+  // how = section on the How It's Made page (/how-its-made/#tumblers) linked from the product pop-up.
   var CATEGORIES = [
-    { key:'greeting cards', id:'greeting-cards', page:'greeting-cards', name:'Greeting Cards', thumb:'cat-cards.jpg',
+    { key:'greeting cards', id:'greeting-cards', page:'greeting-cards', how:'greeting-cards', name:'Greeting Cards', thumb:'cat-cards.jpg',
       blurb:'Scripture-inspired Christmas and everyday cards, singles, 5-packs, and boxed sets.' },
-    { key:'tumblers', id:'tumblers', page:'tumblers', name:'Tumblers', thumb:'cat-tumblers.jpg',
+    { key:'tumblers', id:'tumblers', page:'tumblers', how:'tumblers', name:'Tumblers', thumb:'cat-tumblers.jpg',
       blurb:'Sublimated tumblers with designs to carry a word of hope through the day.' },
-    { key:'coasters', id:'coasters', page:'coasters', name:'Coasters', thumb:'cat-coasters.jpg',
+    { key:'coasters', id:'coasters', page:'coasters', how:'coasters', name:'Coasters', thumb:'cat-coasters.jpg',
       blurb:'Ceramic coasters with cork backing, sold individually or in sets.' },
-    { key:'glass cutting boards', id:'cutting-boards', page:'cutting-boards', name:'Glass Cutting Boards', thumb:'cat-cutting-boards.jpg',
+    { key:'glass cutting boards', id:'cutting-boards', page:'cutting-boards', how:'cutting-boards', name:'Glass Cutting Boards', thumb:'cat-cutting-boards.jpg',
       blurb:'Tempered glass cutting boards that double as beautiful kitchen keepsakes.' },
-    { key:'gifts & more', id:'misc', page:'gifts', name:'Gifts & More', thumb:'cat-gifts.jpg',
-      blurb:'Seasonal pieces, custom orders, and other handcrafted treasures.' }
+    { key:'gifts & more', id:'misc', page:'gifts', how:'packaging-and-stands', name:'Gifts & More', thumb:'cat-gifts.jpg',
+      blurb:'Seasonal pieces, custom orders, and other treasures designed and printed at home.' }
   ];
   CATEGORIES.forEach(function (c) { c.thumb = ROOT + c.thumb; c.url = ROOT + c.page + '/'; });
   // Which page is this? <body data-category="tumblers"> on a category page, nothing on the home page.
@@ -338,7 +341,7 @@
       '<div class="cap" aria-live="polite"><b></b><small></small></div>' +
       '<div class="thumbs" role="group" aria-label="Product views"></div></div>' +
       '<div class="info"><h2 id="gal-title"></h2><div class="divider"></div><div class="price"></div><div class="lead"></div>' +
-      '<p class="desc"></p><a class="btn" href="#">Order</a></div></div></div>';
+      '<p class="desc"></p><a class="btn" href="#">Order</a><a class="howto" href="#" hidden>How it\u2019s made \u2192</a></div></div></div>';
     document.body.appendChild(galWrap.firstChild);
   }
   var gal = document.getElementById('gal'), box = gal.querySelector('.box'), stage = gal.querySelector('.stage'),
@@ -451,6 +454,8 @@
     ld.textContent = p.lead || ''; ld.hidden = !p.lead;
     ds.textContent = p.description || ''; ds.hidden = !p.description;
     ob.href = orderHref(p);
+    var hw = gal.querySelector('.info .howto'); // "How it's made" link for this product's category
+    if (hw) { hw.hidden = !(p.cat && p.cat.how); if (p.cat && p.cat.how) hw.href = ROOT + 'how-its-made/#' + p.cat.how; }
     if (safeLink(p.link)) { ob.target = '_blank'; ob.rel = 'noopener'; } else { ob.removeAttribute('target'); ob.removeAttribute('rel'); }
     buildThumbs();
     gal.hidden = false; gal.classList.add('open'); document.documentElement.classList.add('gal-lock'); setInert(true);
@@ -523,7 +528,10 @@
   });
   window.addEventListener('hashchange', route);
 
+  initMenu();
+
   // ---- Mobile menu ------------------------------------------------------
+  function initMenu() {
   document.documentElement.classList.add('js');
   var menuBtn = document.querySelector('.menu-btn'), siteNav = document.getElementById('sitenav');
   function setMenu(open) { menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false'); siteNav.classList.toggle('open', open); }
@@ -536,6 +544,7 @@
       if (siteNav.classList.contains('open') && !(e.target.closest && e.target.closest('.topbar'))) setMenu(false);
     });
     siteNav.addEventListener('click', function (e) { if (e.target.closest && e.target.closest('a')) setMenu(false); });
+  }
   }
 
   render(null); // home: tiles right away (and as the fallback); category page: a loading line

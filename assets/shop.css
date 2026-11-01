@@ -188,3 +188,53 @@ html.gal-lock, html.gal-lock body { overflow:hidden; }
 .gal .stage .nophoto { position:absolute; inset:0; height:100%; }
 .gal .stage .nophoto span { font-size:1.4rem; }
 .prod .ph { color:inherit; text-decoration:none; }
+
+/* ---- "How it's made" links (category pages + product pop-up) ---- */
+.howlink { margin:2px 0 10px; font-size:.85rem; }
+.howlink a, .gal .info .howto { color:var(--deep); font-weight:700; text-decoration:none; border-bottom:1px solid var(--gold); }
+.howlink a:hover, .gal .info .howto:hover { color:var(--gold); }
+.gal .info .howto { display:inline-block; align-self:center; margin:6px auto 0; font-size:.85rem; }
+
+/* ---- How It's Made page ---- */
+.hm { max-width:1000px; margin:0 auto; padding:0 20px; }
+.hm-intro { max-width:680px; margin:0 auto; font-size:1.05rem; line-height:1.75; }
+.hm-intro p + p { margin-top:14px; }
+.hm-intro p:first-child { font-family:'Cormorant Garamond',serif; font-size:1.45rem; line-height:1.45; color:var(--deep); font-style:italic; }
+.hm-jump { display:flex; flex-wrap:wrap; justify-content:center; gap:8px; margin:30px auto 10px; }
+.hm-jump a { padding:8px 16px; border:1px solid #d9c7a6; border-radius:999px; background:#fff; color:var(--deep); text-decoration:none;
+             font-size:.75rem; letter-spacing:1.2px; text-transform:uppercase; font-weight:700; }
+.hm-jump a:hover { background:var(--deep); color:#fff; }
+.hm-note { max-width:720px; margin:30px auto 10px; padding:22px 28px; border:1px dashed #d9c7a6; border-radius:16px; background:rgba(255,255,255,.7);
+           line-height:1.7; font-size:.98rem; }
+.hm-note h2 { font-family:'Cormorant Garamond',serif; font-weight:600; font-size:1.5rem; color:var(--deep); margin-bottom:6px; }
+.hm-sec { display:grid; grid-template-columns:minmax(0,300px) minmax(0,1fr); gap:34px; align-items:center; text-align:left; margin:40px auto 0;
+          padding:28px; background:#fff; border:1px solid #eadfcb; border-radius:16px; box-shadow:0 8px 30px rgba(61,44,78,.07); scroll-margin-top:80px; }
+.hm-sec:nth-of-type(even) { grid-template-columns:minmax(0,1fr) minmax(0,300px); }
+.hm-sec:nth-of-type(even) img { order:2; }
+.hm-sec img { width:100%; height:auto; aspect-ratio:1/1; object-fit:cover; border-radius:12px; background:#f4ede1; display:block; }
+.hm-sec h2 { font-family:'Cormorant Garamond',serif; font-weight:600; font-size:2rem; color:var(--deep); margin-bottom:10px; }
+.hm-sec p { line-height:1.75; font-size:1rem; }
+.hm-sec p + p { margin-top:12px; }
+.hm-sec .care { font-size:.8rem; letter-spacing:1.2px; text-transform:uppercase; color:#8a8197; }
+.hm-sec .seeall { margin-top:18px; }
+.hm-close { max-width:640px; margin:46px auto 10px; font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.45rem; line-height:1.5; color:var(--deep); }
+.hm-jump a:focus-visible { outline:3px solid var(--gold); outline-offset:2px; }
+@media (max-width:760px) {
+  .hm { padding:0 14px; }
+  .hm-sec, .hm-sec:nth-of-type(even) { grid-template-columns:1fr; gap:18px; padding:20px; text-align:center; }
+  .hm-sec:nth-of-type(even) img { order:0; }
+  .hm-sec img { max-width:320px; margin:0 auto; }
+  .hm-note { padding:18px 20px; }
+}
+.gal .info .howto[hidden] { display:none; }
+
+/* ---- Nav: room for "How It's Made" on one line on desktop ---- */
+@media (min-width:861px) {
+  .topbar .in { max-width:1280px; }
+  .sitenav ul { gap:2px; }
+  .sitenav a { padding:8px 10px; letter-spacing:1px; }
+}
+@media (min-width:861px) and (max-width:1180px) {
+  .sitenav a { padding:7px 8px; font-size:.72rem; letter-spacing:.6px; }
+  .brand span { font-size:1.1rem; }
+}
