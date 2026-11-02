@@ -8,6 +8,7 @@
   var CSV_URL = window.GOG_CSV_URL ||
     'https://docs.google.com/spreadsheets/d/' + SHEET_ID + '/gviz/tq?tqx=out:csv&headers=1&sheet=Products';
   var ORDER_EMAIL = 'hello@glimpsesofglory.shop';
+  var SHOW_HOME_SECTIONS = false; // true = also list products under the tiles on the home page
   var HOME_LIMIT = 4;       // products shown per category on the home page; the rest are on the category page
   // Site root (folder that holds index.html), worked out from this script's own URL (/assets/shop.js),
   // so the same file works on the home page and inside /tumblers/ etc.
@@ -240,7 +241,7 @@
 
   function mailLink(text) { var a = el('a', null, text); a.href = 'mailto:' + ORDER_EMAIL; return a; }
 
-  // Home page: category tiles, then a section (up to HOME_LIMIT products + a link to the category page)
+  // Home page: category tiles (and, only if SHOW_HOME_SECTIONS is true, a section (up to HOME_LIMIT products + a link to the category page)
   // only for categories that have real products. Samples are skipped here; they stay on the category pages.
   function renderHome(groups) {
     var nav = document.getElementById('cats'), main = document.getElementById('sections');
@@ -248,7 +249,7 @@
     CATEGORIES.forEach(function (c) {
       var items = (groups ? (groups[c.key] || []) : []).filter(function (p) { return !isSample(p); });
       nav.appendChild(catTile(c, items));
-      if (!items.length) return; // no real products yet: the tile above says "Coming soon"; no section on the home page
+      if (!SHOW_HOME_SECTIONS || !items.length) return; // home shows only the category tiles; products live on the category pages
 
       var sec = el('section', 'catsec'); sec.id = c.id; // old #tumblers-style links keep working
       var h2 = el('h2', 'section'), hl = el('a', null, c.name); hl.href = c.url;
