@@ -252,3 +252,14 @@ html.gal-lock, html.gal-lock body { overflow:hidden; }
   .sitenav a { padding:7px 8px; font-size:.72rem; letter-spacing:.6px; }
   .brand span { font-size:1.1rem; }
 }
+
+/* ---- About card: red maple-leaf corner accents (from Gladys's flyer photo) ---- */
+.about-card.has-leaves { position:relative; overflow:hidden; padding-top:52px; padding-bottom:48px; }
+.about-card.has-leaves > :not(.about-leaves) { position:relative; z-index:1; }
+.about-leaves { position:absolute; z-index:0; pointer-events:none; height:auto; }
+.about-leaves.tl { top:0; left:0; width:130px; opacity:.9; }
+.about-leaves.br { bottom:0; right:0; width:100px; transform:rotate(180deg); opacity:.7; }
+@media (max-width:560px) {
+  .about-card.has-leaves { padding-top:84px; padding-bottom:64px; }
+  .about-leaves.tl { width:84px; } .about-leaves.br { width:64px; }
+}
