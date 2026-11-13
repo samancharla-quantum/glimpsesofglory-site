@@ -80,6 +80,9 @@
   }
 
   var SKU_RE = /^GOG-\d\d-[A-Z0-9-]+$/i; // item code pattern, e.g. GOG-26-COSQ001
+  // Cart (assets/cart.js). If the cart is off or not loaded, every product keeps its email Order button.
+  var CART = window.GOGCart || { enabled: false, canBuy: function () { return false; } };
+  function firstPhoto(p) { var v = (p.views || []).filter(function (x) { return x.type === 'img'; })[0]; return v ? imgSrc(v.link, 200) : ''; }
 
   function norm(s) { return String(s || '').trim().toLowerCase().replace(/\s+/g, ' ').replace(/\band\b/g, '&'); }
 
@@ -246,6 +249,14 @@
     if (p.price) meta.appendChild(el('div', 'price', p.price));
     if (p.lead) meta.appendChild(el('div', 'lead', p.lead));
     card.appendChild(meta);
+    if (CART.canBuy(p)) { // cart on (assets/cart-config.js): Add to cart, with the email order link kept as a fallback
+      var buy = el('div', 'buy');
+      var ab = el('button', 'btn add', 'Add to cart'); ab.type = 'button'; ab.setAttribute('aria-label', 'Add to cart: ' + p.name);
+      ab.addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); CART.add(p, 1, firstPhoto(p)); });
+      var alt = el('a', 'orderalt', 'or order by email'); alt.href = orderHref(p);
+      buy.appendChild(ab); buy.appendChild(alt); card.appendChild(buy);
+      return card;
+    }
     var b = el('a', 'btn', 'Order'); b.href = orderHref(p);
     if (safeLink(p.link)) { b.target = '_blank'; b.rel = 'noopener'; }
     card.appendChild(b);
@@ -355,7 +366,9 @@
       '<div class="cap" aria-live="polite"><b></b><small></small></div>' +
       '<div class="thumbs" role="group" aria-label="Product views"></div></div>' +
       '<div class="info"><h2 id="gal-title"></h2><div class="divider"></div><div class="price"></div><div class="lead"></div><div class="sku" hidden></div>' +
-      '<p class="desc"></p><a class="btn" href="#">Order</a><a class="howto" href="#" hidden>How it\u2019s made \u2192</a></div></div></div>';
+      '<p class="desc"></p><div class="deal" hidden></div><label class="qtypick" hidden>Qty <input type="number" min="1" max="20" value="1" inputmode="numeric"></label>' +
+      '<button type="button" class="btn add" hidden>Add to cart</button><a class="btn" href="#">Order</a><a class="orderalt" href="#" hidden>or order by email</a>' +
+      '<a class="howto" href="#" hidden>How it\u2019s made \u2192</a></div></div></div>';
     document.body.appendChild(galWrap.firstChild);
   }
   var gal = document.getElementById('gal'), box = gal.querySelector('.box'), stage = gal.querySelector('.stage'),
@@ -463,12 +476,21 @@
     if (!isOpen) lastFocus = document.activeElement;
     cur = p; isOpen = true;
     gal.querySelector('#gal-title').textContent = p.name;
-    var pr = gal.querySelector('.info .price'), ld = gal.querySelector('.info .lead'), ds = gal.querySelector('.info .desc'), ob = gal.querySelector('.info .btn');
+    var pr = gal.querySelector('.info .price'), ld = gal.querySelector('.info .lead'), ds = gal.querySelector('.info .desc'), ob = gal.querySelector('.info a.btn');
     pr.textContent = p.price || ''; pr.hidden = !p.price;
     ld.textContent = p.lead || ''; ld.hidden = !p.lead;
     var sk = gal.querySelector('.info .sku'); if (sk) { sk.textContent = p.sku ? 'Item ' + p.sku : ''; sk.hidden = !p.sku; }
     ds.textContent = p.description || ''; ds.hidden = !p.description;
     ob.href = orderHref(p);
+    var buyable = CART.canBuy(p), addB = gal.querySelector('.info .btn.add'), qp = gal.querySelector('.info .qtypick'),
+        alt = gal.querySelector('.info .orderalt'), deal = gal.querySelector('.info .deal');
+    if (addB) {
+      addB.hidden = qp.hidden = alt.hidden = !buyable; ob.hidden = buyable;
+      qp.querySelector('input').value = 1; alt.href = orderHref(p);
+      var isCoaster = buyable && window.GOGRules && window.GOGRules.kindOfSku(p.sku) === 'coaster';
+      deal.hidden = !isCoaster; deal.textContent = isCoaster ? 'Mix and match: any 4 coasters for $20' : '';
+      addB.setAttribute('aria-label', 'Add to cart: ' + p.name);
+    }
     var hw = gal.querySelector('.info .howto'); // "How it's made" link for this product's category
     if (hw) { hw.hidden = !(p.cat && p.cat.how); if (p.cat && p.cat.how) hw.href = ROOT + 'how-its-made/#' + p.cat.how; }
     if (safeLink(p.link)) { ob.target = '_blank'; ob.rel = 'noopener'; } else { ob.removeAttribute('target'); ob.removeAttribute('rel'); }
@@ -504,6 +526,11 @@
   }
 
   gal.querySelector('.close').addEventListener('click', closeGal);
+  var galAdd = gal.querySelector('.info .btn.add');
+  if (galAdd) galAdd.addEventListener('click', function () {
+    var q = parseInt(gal.querySelector('.info .qtypick input').value, 10) || 1;
+    if (cur) CART.add(cur, Math.max(1, Math.min(20, q)), firstPhoto(cur));
+  });
   prevB.addEventListener('click', function () { show(idx - 1); });
   nextB.addEventListener('click', function () { show(idx + 1); });
   gal.addEventListener('click', function (e) { if (e.target === gal) closeGal(); });
@@ -534,7 +561,7 @@
   document.getElementById('sections').addEventListener('click', function (e) {
     var a = e.target.closest && e.target.closest('a.ph, .prod h3 a');
     var card = e.target.closest && e.target.closest('.prod');
-    if (!card || (e.target.closest('.btn'))) return;
+    if (!card || e.target.closest('.btn') || e.target.closest('.orderalt')) return;
     if (!a) a = card.querySelector('a.ph');
     if (!a) return;
     e.preventDefault();
