@@ -89,6 +89,7 @@ html.gal-lock, html.gal-lock body { overflow:hidden; }
 .gal .info h2 { font-family:'Cormorant Garamond',serif; font-weight:600; font-size:2rem; line-height:1.15; color:var(--deep); }
 .gal .info .divider { margin:14px auto 16px; }
 .gal .info .price { font-family:'Cormorant Garamond',serif; font-weight:600; font-size:1.6rem; color:var(--gold); }
+.gal .info .sku { font-size:.72rem; letter-spacing:.5px; color:#a59fb0; margin-top:6px; }
 .gal .info .lead { font-size:.78rem; letter-spacing:1px; text-transform:uppercase; color:#8a8197; margin-top:2px; }
 .gal .info .desc { font-size:.95rem; line-height:1.6; margin:14px 0 4px; white-space:pre-line; }
 .gal .info .btn { margin:18px auto 6px; }

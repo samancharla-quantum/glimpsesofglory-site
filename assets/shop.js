@@ -79,6 +79,8 @@
     return rows.filter(function (r) { return r.some(function (v) { return v.trim() !== ''; }); });
   }
 
+  var SKU_RE = /^GOG-\d\d-[A-Z0-9-]+$/i; // item code pattern, e.g. GOG-26-COSQ001
+
   function norm(s) { return String(s || '').trim().toLowerCase().replace(/\s+/g, ' ').replace(/\band\b/g, '&'); }
 
   function toObjects(rows) {
@@ -95,11 +97,22 @@
     };
     if (col.photo < 0) col.photo = idx(['image 1', 'image', 'photo link 1']);
     if (col.name < 0 || col.category < 0) throw new Error('Sheet headers not recognized');
+    // Shifted rows: some rows put the item code (e.g. GOG-26-CORD001) under "Name", the product name under
+    // "Description" and the verse / subtitle in the next (unlabelled) column. Detect them by the code pattern
+    // and read the name, description and SKU from where they really are. Other rows are read as before.
+    var used = Object.keys(col).map(function (k) { return col[k]; });
+    var extra = col.description > -1 && used.indexOf(col.description + 1) === -1 ? col.description + 1 : -1;
     return rows.slice(1).map(function (r) {
       function g(k) { return col[k] > -1 && r[col[k]] != null ? String(r[col[k]]).trim() : ''; }
-      return { show:g('show'), category:g('category'), name:g('name'), description:g('description'),
+      function at(j) { return j > -1 && r[j] != null ? String(r[j]).trim() : ''; }
+      var p = { show:g('show'), category:g('category'), name:g('name'), description:g('description'),
                price:g('price'), lead:g('lead'), photo:g('photo'), link:g('link'), sort:g('sort'),
-               img2:g('img2'), img3:g('img3'), img4:g('img4'), video:g('video'), captions:g('captions'), slug:g('slug') };
+               img2:g('img2'), img3:g('img3'), img4:g('img4'), video:g('video'), captions:g('captions'), slug:g('slug'), sku:'' };
+      if (SKU_RE.test(p.name) && p.description) {
+        p.sku = p.name; p.name = p.description; p.description = at(extra);
+        if (!p.slug) p.slug = p.sku; // keeps #p/gog-26-... deep links stable and unique (names repeat across round/square)
+      }
+      return p;
     });
   }
 
@@ -174,9 +187,9 @@
   function orderHref(p) {
     var l = safeLink(p.link);
     if (l) return l;
-    var body = 'Hello Glimpses of Glory,\n\nI would like to order: ' + p.name +
+    var body = 'Hello Glimpses of Glory,\n\nI would like to order: ' + p.name + (p.sku ? ' [' + p.sku + ']' : '') +
       (p.price ? ' (' + p.price + ')' : '') + '\nQuantity: \nNeeded by (date): \nPersonalization / notes: \n\nMy name and phone: \n\nThank you!';
-    return 'mailto:' + ORDER_EMAIL + '?subject=' + encodeURIComponent('Order request: ' + p.name) +
+    return 'mailto:' + ORDER_EMAIL + '?subject=' + encodeURIComponent('Order request: ' + p.name + (p.sku ? ' [' + p.sku + ']' : '')) +
            '&body=' + encodeURIComponent(body);
   }
 
@@ -324,7 +337,7 @@
       (groups[k] = groups[k] || []).push(p);
     });
     Object.keys(groups).forEach(function (k) {
-      groups[k].sort(function (a, b) { return (sortNum(a.sort) - sortNum(b.sort)) || a.name.localeCompare(b.name); });
+      groups[k].sort(function (a, b) { return (sortNum(a.sort) - sortNum(b.sort)) || (a.sku || a.name).localeCompare(b.sku || b.name); });
     });
     return groups;
   }
@@ -341,7 +354,7 @@
       '<button type="button" class="navb next" aria-label="Next view">&#8250;</button></div>' +
       '<div class="cap" aria-live="polite"><b></b><small></small></div>' +
       '<div class="thumbs" role="group" aria-label="Product views"></div></div>' +
-      '<div class="info"><h2 id="gal-title"></h2><div class="divider"></div><div class="price"></div><div class="lead"></div>' +
+      '<div class="info"><h2 id="gal-title"></h2><div class="divider"></div><div class="price"></div><div class="lead"></div><div class="sku" hidden></div>' +
       '<p class="desc"></p><a class="btn" href="#">Order</a><a class="howto" href="#" hidden>How it\u2019s made \u2192</a></div></div></div>';
     document.body.appendChild(galWrap.firstChild);
   }
@@ -453,6 +466,7 @@
     var pr = gal.querySelector('.info .price'), ld = gal.querySelector('.info .lead'), ds = gal.querySelector('.info .desc'), ob = gal.querySelector('.info .btn');
     pr.textContent = p.price || ''; pr.hidden = !p.price;
     ld.textContent = p.lead || ''; ld.hidden = !p.lead;
+    var sk = gal.querySelector('.info .sku'); if (sk) { sk.textContent = p.sku ? 'Item ' + p.sku : ''; sk.hidden = !p.sku; }
     ds.textContent = p.description || ''; ds.hidden = !p.description;
     ob.href = orderHref(p);
     var hw = gal.querySelector('.info .howto'); // "How it's made" link for this product's category
