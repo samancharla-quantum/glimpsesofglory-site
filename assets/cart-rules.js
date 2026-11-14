@@ -3,7 +3,7 @@
 // Glimpses of Glory cart rules: pure functions, no network. Money is integer cents.
 // Used by the Worker (authoritative) and copied to the site (assets/cart-rules.js) for the live preview.
 // Approved by Satish, Nov 13 2026 (Stage 0 answers):
-//   - Pickup in Brooklyn Park: $0 shipping (buyer choice).
+//   - Pickup in the north suburbs of Minneapolis: $0 shipping (buyer choice).
 //   - Free shipping when the merchandise subtotal AFTER discounts is $60.00 or more (before tax and shipping).
 //   - Cards-only orders of 1-5 cards: $2.00. Cards-only with 6+ cards: $9.95.
 //   - Everything else: $9.95 flat per order.
@@ -80,7 +80,7 @@ function priceCart(lines, fulfillment) {
 
   let shipping, method, shipLabel;
   if (fulfillment === 'pickup') {
-    shipping = 0; method = 'pickup'; shipLabel = 'Free pickup in Brooklyn Park, MN';
+    shipping = 0; method = 'pickup'; shipLabel = 'Free pickup in the north suburbs of Minneapolis';
   } else if (afterDiscount >= RULES.FREE_SHIP_MIN_CENTS) {
     shipping = 0; method = 'free'; shipLabel = 'Free shipping (orders $60+)';
   } else if (cardsOnly && cardUnits <= RULES.CARD_SHIP_MAX_CARDS) {

@@ -64,7 +64,7 @@
     '</aside>';
   document.body.appendChild(wrap);
   var $ = function (s) { return wrap.querySelector(s); };
-  $('.cd-pktext').textContent = CFG.pickupText || 'Free pickup in Brooklyn Park, MN.';
+  $('.cd-pktext').textContent = CFG.pickupText || 'Free pickup in the north suburbs of Minneapolis.';
   var live = el('div', 'cart-toast'); live.setAttribute('role', 'status'); document.body.appendChild(live);
 
   var toastT;

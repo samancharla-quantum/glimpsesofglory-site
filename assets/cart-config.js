@@ -5,5 +5,5 @@ window.GOG_CART = {
   enabled: true,
   // Checkout service (Cloudflare Worker, LIVE Square payments). Stage 6, approved by Satish Nov 13 2026.
   workerUrl: 'https://gog-cart-prod.jolly-base-8339.workers.dev',
-  pickupText: "Free pickup in Brooklyn Park, MN. We'll contact you to arrange a time within 2-3 days."
+  pickupText: "Free pickup in the north suburbs of Minneapolis. We'll contact you to arrange a time within 2-3 days."
 };
