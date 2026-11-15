@@ -349,3 +349,45 @@ html.cart-lock .cart-toast { bottom:120px; }
 @media (max-width:340px) { .menu-btn { font-size:0; gap:0; } }
 .thanks-card a:not(.seeall) { color:var(--deep); font-weight:700; text-decoration:none; border-bottom:1px solid var(--gold); }
 @media (max-width:560px) { .thanks-card { margin:0 14px; padding:24px 22px; } }
+
+/* ---- Custom request entry point (custom.html) ---- */
+.customlink { display:inline-block; margin:0 auto 18px; font-size:.75rem; color:var(--deep); font-weight:700;
+              text-decoration:none; border-bottom:1px solid var(--gold); }
+.customlink:hover { color:var(--gold); }
+.prod .buy + .customlink { margin-top:-8px; }
+.gal .info .customlink { align-self:center; margin:8px auto 6px; }
+.customlink:focus-visible { outline:3px solid var(--gold); outline-offset:2px; }
+
+
+/* Extra nav item ("Custom"): give the bar more room so About stays on one line. */
+@media (min-width:861px) {
+  .topbar .in { max-width:1520px; }
+}
+@media (min-width:861px) and (max-width:1600px) {
+  .sitenav a { padding:7px 8px; font-size:.72rem; letter-spacing:.5px; }
+}
+
+
+/* With the added Custom nav item, the links no longer fit on one line below ~1180px.
+   Use the Menu button in that range so About does not wrap under Custom. */
+@media (max-width:1179px) {
+  .js .menu-btn { display:inline-flex; }
+  .js .sitenav { display:none; position:absolute; left:0; right:0; top:100%; background:var(--cream); border-bottom:1px solid #eadfcb;
+                 box-shadow:0 14px 30px rgba(61,44,78,.12); padding:8px 16px 16px; }
+  .js .sitenav.open { display:block; }
+  .js .sitenav ul { flex-direction:column; align-items:stretch; justify-content:center; }
+  .js .sitenav a { padding:13px 16px; font-size:.85rem; letter-spacing:1.2px; text-align:left; border-bottom:1px solid #f1e7d6; border-radius:10px; }
+  .topbar .in { flex-wrap:nowrap; justify-content:flex-start; gap:8px; }
+  .topbar .sitenav { margin-left:0; }
+  .cart-btn { margin-left:auto; order:2; padding:7px 10px; }
+  .cart-btn .lbl { display:none; }
+  .menu-btn { order:3; }
+}
+
+
+/* Category-page entry point for a custom piece (not per product). */
+.custom-banner { max-width:620px; margin:10px auto 8px; padding:12px 18px; background:#fff; border:1px solid #eadfcb;
+                 border-radius:12px; font-size:.95rem; line-height:1.55; color:var(--deep); box-shadow:0 8px 30px rgba(61,44,78,.05); }
+.custom-banner a { color:var(--deep); font-weight:700; text-decoration:none; border-bottom:1px solid var(--gold); white-space:nowrap; }
+.custom-banner a:hover { color:var(--gold); }
+.custom-banner a:focus-visible { outline:3px solid var(--gold); outline-offset:2px; }

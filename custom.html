@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Request a Custom Piece | Glimpses of Glory</title>
+<meta name="description" content="Request a custom Glimpses of Glory piece: choose a product, share a photo or a description, and tell us the text and colors you have in mind.">
+<link rel="canonical" href="https://glimpsesofglory.shop/custom.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Glimpses of Glory">
+<meta property="og:title" content="Request a Custom Piece | Glimpses of Glory">
+<meta property="og:description" content="Request a custom Glimpses of Glory piece: choose a product, share a photo or a description, and tell us the text and colors you have in mind.">
+<meta property="og:url" content="https://glimpsesofglory.shop/custom.html">
+<meta property="og:image" content="https://glimpsesofglory.shop/logo.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/shop.css">
+<link rel="stylesheet" href="assets/custom.css">
+</head>
+<body data-page="static">
+  <div class="topbar">
+    <div class="in">
+      <a class="brand" href="./"><img src="logo.png" alt="" width="38" height="35"><span>Glimpses of Glory</span></a>
+      <button type="button" class="menu-btn" aria-expanded="false" aria-controls="sitenav"><span class="bars" aria-hidden="true"></span>Menu</button>
+      <nav class="sitenav" id="sitenav" aria-label="Shop">
+        <ul>
+        <li><a href="./">Home</a></li>
+        <li><a href="greeting-cards/">Greeting Cards</a></li>
+        <li><a href="tumblers/">Tumblers</a></li>
+        <li><a href="coasters/">Coasters</a></li>
+        <li><a href="cutting-boards/">Glass Cutting Boards</a></li>
+        <li><a href="gifts/">Gifts &amp; More</a></li>
+        <li><a href="how-its-made/">How It&rsquo;s Made</a></li>
+        <li><a href="custom.html" aria-current="page">Custom</a></li>
+        <li><a href="./#about">About</a></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+  <main>
+    <div class="pagehead">
+      <div class="crumbs"><a href="./">Home</a> &rsaquo; Request a Custom Piece</div>
+      <h1>Request a Custom Piece</h1>
+      <div class="divider"></div>
+      <p class="intro">Tell us about the piece you have in mind. We&rsquo;ll review your request and get back to you with a price, a timeline, and any design questions before anything is printed or charged.</p>
+    </div>
+
+    <div class="custom-wrap">
+      <div class="custom-success thanks-card" id="custom-success" hidden>
+        <p class="about-tagline">Your request is in, and we&rsquo;re grateful.</p>
+        <p>Thank you. We&rsquo;ve received your custom request<span id="success-id-wrap"> (<span id="success-id"></span>)</span> and will be in touch by email to talk through the design, the price, and the timing.</p>
+        <p>Questions in the meantime? <a href="mailto:hello@glimpsesofglory.shop">Email us</a>.</p>
+        <p><a class="seeall" href="./">Keep browsing</a></p>
+      </div>
+
+      <form class="custom-form" id="custom-form" novalidate>
+        <p class="custom-preselect" id="custom-preselect" hidden></p>
+
+        <fieldset>
+          <legend>The piece</legend>
+          <label for="category">Category <span class="req">required</span></label>
+          <select id="category" name="category" required>
+            <option value="">Choose a category</option>
+            <option value="coaster-round">Custom Coaster (Round)</option>
+            <option value="coaster-square">Custom Coaster (Square)</option>
+            <option value="tumbler">Custom Tumbler</option>
+            <option value="cutting-board">Custom Cutting Board</option>
+            <option value="greeting-card">Custom Greeting Card</option>
+            <option value="gift">Custom Gift</option>
+            <option value="other">Other / I&rsquo;m not sure</option>
+          </select>
+          <p class="field-note" id="category-note">Choose the kind of piece you have in mind, not a specific design from the shop. If you&rsquo;re not sure, pick &ldquo;Other / I&rsquo;m not sure&rdquo; and tell us more in the notes.</p>
+        </fieldset>
+
+        <fieldset>
+          <legend>The design</legend>
+          <p class="field-note intro-note">Please send a background image, or describe the image you have in mind. One of the two is required &mdash; both are welcome.</p>
+
+          <div class="upload">
+            <label for="image">Background image</label>
+            <p class="field-note">Please send the highest-resolution image you have (at least ~300 DPI at print size, the original photo, not a screenshot). Up to 10&nbsp;MB. JPEG, PNG, WebP, or HEIC.</p>
+            <input type="file" id="image" name="image" accept="image/jpeg,image/png,image/webp,image/heic,image/heif,image/gif,image/tiff,.jpg,.jpeg,.png,.webp,.heic,.heif,.gif,.tif,.tiff">
+            <label class="upload-btn" for="image">Choose a photo</label>
+            <div class="image-meta" id="image-meta" hidden>
+              <img id="image-preview" alt="Preview of the photo you selected">
+              <div>
+                <p id="image-info"></p>
+                <p class="px" id="image-pixels" aria-live="polite"></p>
+                <button type="button" class="linkish" id="image-clear">Remove photo</button>
+              </div>
+            </div>
+          </div>
+
+          <label for="imageDesc">Or describe the image</label>
+          <textarea id="imageDesc" name="imageDesc" rows="3" maxlength="1000" placeholder="For example: a close-up of red maple leaves on a path, early morning light"></textarea>
+
+          <div class="text-lines">
+            <p class="subhead">Custom text <span class="opt">optional</span></p>
+            <p class="field-note">Up to three lines, all optional. Leave them blank if the piece is just the image.</p>
+            <label for="text1">Line 1 <span class="opt">optional</span></label>
+            <input type="text" id="text1" name="text1" maxlength="80" placeholder="For example, a name or a short verse">
+            <label for="text2">Line 2 <span class="opt">optional</span></label>
+            <input type="text" id="text2" name="text2" maxlength="80">
+            <label for="text3">Line 3 <span class="opt">optional</span></label>
+            <input type="text" id="text3" name="text3" maxlength="80">
+          </div>
+
+          <div class="color-block">
+            <p class="subhead" id="color-label">Text color</p>
+            <div class="swatches" role="radiogroup" aria-labelledby="color-label">
+              <button type="button" class="swatch" data-color="#3d2c4e" data-name="Deep plum" aria-label="Deep plum" title="Deep plum"></button>
+              <button type="button" class="swatch" data-color="#b8893b" data-name="Gold" aria-label="Gold" title="Gold"></button>
+              <button type="button" class="swatch" data-color="#1a1a1a" data-name="Black" aria-label="Black" title="Black"></button>
+              <button type="button" class="swatch light" data-color="#ffffff" data-name="White" aria-label="White" title="White"></button>
+              <button type="button" class="swatch light" data-color="#fbf7f0" data-name="Cream" aria-label="Cream" title="Cream"></button>
+            </div>
+            <div class="color-custom">
+              <label for="textColorPicker">Or pick a color</label>
+              <input type="color" id="textColorPicker" value="#3d2c4e" aria-label="Custom text color">
+              <input type="text" id="textColor" name="textColor" value="#3d2c4e" maxlength="40" spellcheck="false" aria-label="Text color value">
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Quantity</legend>
+          <label for="quantity">How many? <span class="req">required</span></label>
+          <input type="number" id="quantity" name="quantity" min="1" max="99" value="1" inputmode="numeric" required>
+        </fieldset>
+
+        <fieldset>
+          <legend>Delivery</legend>
+          <div class="choice" role="radiogroup" aria-label="Delivery">
+            <label class="choice-card">
+              <input type="radio" name="delivery" id="delivery-ship" value="Ship">
+              <span><b>Ship to me</b><small>We&rsquo;ll ship to the address you give below.</small></span>
+            </label>
+            <label class="choice-card">
+              <input type="radio" name="delivery" id="delivery-pickup" value="Pickup">
+              <span><b>Pickup</b><small>Free pickup in the north suburbs of Minneapolis. We&rsquo;ll contact you to arrange a time.</small></span>
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Your details</legend>
+          <label for="name">Name <span class="req">required</span></label>
+          <input type="text" id="name" name="name" maxlength="80" autocomplete="name" required>
+
+          <label for="email">Email <span class="req">required</span></label>
+          <input type="email" id="email" name="email" maxlength="120" autocomplete="email" required>
+
+          <label for="phone">Phone <span class="req">required</span></label>
+          <input type="tel" id="phone" name="phone" maxlength="40" autocomplete="tel" required>
+
+          <div id="address-wrap" hidden>
+            <p class="subhead">Shipping address <span class="req">required</span></p>
+            <label for="street">Street address <span class="req">required</span></label>
+            <input type="text" id="street" name="street" maxlength="120" autocomplete="address-line1">
+
+            <div class="addr-row">
+              <div>
+                <label for="city">City <span class="req">required</span></label>
+                <input type="text" id="city" name="city" maxlength="80" autocomplete="address-level2">
+              </div>
+              <div>
+                <label for="state">State <span class="req">required</span></label>
+                <select id="state" name="state" autocomplete="address-level1">
+                  <option value="">Select</option>
+                </select>
+              </div>
+              <div>
+                <label for="zip">ZIP <span class="req">required</span></label>
+                <input type="text" id="zip" name="zip" maxlength="10" inputmode="numeric" autocomplete="postal-code">
+              </div>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Anything else?</legend>
+          <label for="neededBy">Needed by <span class="opt">optional</span></label>
+          <input type="date" id="neededBy" name="neededBy">
+          <label for="notes">Notes <span class="opt">optional</span></label>
+          <textarea id="notes" name="notes" rows="4" maxlength="2000" placeholder="Occasion, gift message, questions, or anything else we should know"></textarea>
+        </fieldset>
+
+        <!-- Honeypot: leave empty. Hidden from people, not from simple bots. -->
+        <div class="hp" aria-hidden="true">
+          <label for="website">Website</label>
+          <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+        </div>
+
+        <p class="custom-err" id="custom-err" role="alert" hidden></p>
+        <button type="submit" class="btn" id="custom-submit">Send request</button>
+        <p class="field-note submit-note">This is a request, not an order. We&rsquo;ll confirm the details and the price with you before anything is due.</p>
+      </form>
+    </div>
+  </main>
+
+  <div class="contact">Questions? <a href="mailto:hello@glimpsesofglory.shop">Email us</a></div>
+  <footer>&copy; 2026 Glimpses of Glory &middot; A branch of Armchair Technologies LLC</footer>
+
+<script src="assets/cart-config.js"></script>
+<script src="assets/cart-rules.js"></script>
+<script src="assets/cart.js"></script>
+<script src="assets/shop.js"></script>
+<script src="assets/custom-config.js"></script>
+<script src="assets/custom.js"></script>
+  <!-- Visitor stats (GoatCounter, free, no cookies): dashboard at https://glimpsesofglory.goatcounter.com -->
+  <script data-goatcounter="https://glimpsesofglory.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
